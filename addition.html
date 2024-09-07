@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-top: 20px;
+        }
+
+        #QuestionPaper {
+            width: 80%;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .question {
+            margin: 10px 0;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .question span {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        .question input[type="text"] {
+            padding: 5px;
+            font-size: 16px;
+            width: 50px;
+        }
+
+        .question input[type="text"].wrong {
+            background-color: #ffcccc;
+        }
+
+        .result {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        #CheckAnswers {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }to
+
+        #CheckAnswers:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Math Exam</h1>
+
+<div id="QuestionPaper"></div>
+<input type="button" onClick="CheckAnswers()" id="CheckAnswers" value="Check Answers">
+
+<script>
+    var total_number_of_questions = 0;
+
+    function CheckAnswers() {
+        var i = 1;
+        var marks = 0;
+        while (i <= total_number_of_questions) {
+            var id1 = "user_answer" + i;
+            var id2 = "correct_answer" + i;
+            var userAns = parseFloat(document.getElementById(id1).value).toFixed(3).slice(0,-1);
+            var correctAns = parseFloat(document.getElementById(id2).value).toFixed(3).slice(0,-1);
+            var resultId = "result" + i;
+            if (userAns === correctAns) {
+                marks = marks + 1;
+                document.getElementById(id1).classList.remove('X');
+                document.getElementById(resultId).innerText = "Correct!";
+            } else {
+                document.getElementById(id1).classList.add('wrong');
+                document.getElementById(resultId).innerText = "X! Correct answer: " + correctAns;
+            }
+            i = i + 1;
+        }
+        document.getElementById("CheckAnswers").disabled = true;
+        alert(marks + "/" + total_number_of_questions);
+    }
+
+    function getRandomIntInclusive(min, max) {
+        const minCeiled = Math.ceil(min);
+        const maxFloored = Math.floor(max);
+        return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
+    }
+
+    function DesignQuestionPaper(questionCount, operation, minNum1, maxNum1, minNum2, maxNum2) {
+        var i = 1;
+        while (i <= questionCount) {
+            total_number_of_questions = total_number_of_questions + 1;
+            var num1 = getRandomIntInclusive(minNum1, maxNum1);
+            var num2 = getRandomIntInclusive(minNum2, maxNum2);
+
+		if ( ( (operation === '-') || (operation === '/') ) && num2 > num1)
+		{
+			var num = num1;
+			num1 = num2;
+			num2 = num;
+		}	
+
+
+            var ans = 0;
+            if (operation === '*')
+                ans = num1 * num2;
+            if (operation === '+')
+                ans = num1 + num2;
+            if (operation === '-')
+                ans = num1 - num2;
+            if (operation === '/')
+                ans = num1 / num2;
+        	ans= parseFloat(ans).toFixed(3).slice(0,-1);
+            var id1 = "user_answer" + total_number_of_questions;
+            var id2 = "correct_answer" + total_number_of_questions;
+            var resultId = "result" + total_number_of_questions;
+            var question = "<div class='question'><span>" + num1 + " " + operation + " " + num2 + " = </span> <input type='text' id='" + id1 + "' /> <input type='text' hidden value='" + ans + "' id='" + id2 + "' /> <span class='result' id='" + resultId + "'></span></div>";
+            document.getElementById("QuestionPaper").innerHTML += question;
+            i = i + 1;
+        }
+    }
+
+       
+        DesignQuestionPaper(20, '+', 100, 900, 100, 100);
+         
+
+</script>
+
+</body>
+</html>
