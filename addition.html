@@ -61,8 +61,11 @@
             border: none;
             cursor: pointer;
             font-size: 16px;
-            margin-bottom: 20px;
-        }to
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
 
         #CheckAnswers:disabled {
             background-color: #ccc;
@@ -86,12 +89,12 @@
         while (i <= total_number_of_questions) {
             var id1 = "user_answer" + i;
             var id2 = "correct_answer" + i;
-            var userAns = parseFloat(document.getElementById(id1).value).toFixed(3).slice(0,-1);
-            var correctAns = parseFloat(document.getElementById(id2).value).toFixed(3).slice(0,-1);
+            var userAns = Math.round(parseFloat(document.getElementById(id1).value));
+            var correctAns = Math.round(parseFloat(document.getElementById(id2).value));
             var resultId = "result" + i;
             if (userAns === correctAns) {
                 marks = marks + 1;
-                document.getElementById(id1).classList.remove('X');
+                document.getElementById(id1).classList.remove('wrong');
                 document.getElementById(resultId).innerText = "Correct!";
             } else {
                 document.getElementById(id1).classList.add('wrong');
@@ -116,13 +119,11 @@
             var num1 = getRandomIntInclusive(minNum1, maxNum1);
             var num2 = getRandomIntInclusive(minNum2, maxNum2);
 
-		if ( ( (operation === '-') || (operation === '/') ) && num2 > num1)
-		{
-			var num = num1;
-			num1 = num2;
-			num2 = num;
-		}	
-
+            if ((operation === '-') || (operation === '/') && num2 > num1) {
+                var num = num1;
+                num1 = num2;
+                num2 = num;
+            }
 
             var ans = 0;
             if (operation === '*')
@@ -133,7 +134,7 @@
                 ans = num1 - num2;
             if (operation === '/')
                 ans = num1 / num2;
-        	ans= parseFloat(ans).toFixed(3).slice(0,-1);
+            ans = Math.round(ans);
             var id1 = "user_answer" + total_number_of_questions;
             var id2 = "correct_answer" + total_number_of_questions;
             var resultId = "result" + total_number_of_questions;
@@ -143,10 +144,7 @@
         }
     }
 
-       
-        DesignQuestionPaper(20, '+', 100, 900, 100, 100);
-         
-
+    DesignQuestionPaper(20, '+', 100, 900, 100, 100);
 </script>
 
 </body>
