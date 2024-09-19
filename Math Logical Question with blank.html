@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Logical Questions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff; /* Set to white */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        .container {
+            background-color: #fff;
+            padding: 10px; /* Reduced padding */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: left; /* Left align text */
+            position: relative;
+            margin: 5px; /* Reduced margin */
+            width: 80%; /* Ensure full width */
+            display: flex; /* Flexbox for alignment */
+            justify-content: space-between; /* Space between question and input */
+            align-items: center; /* Center align vertically */
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            font-size: 1.2em;
+            color: #555;
+            margin: 0; /* Remove margin for better alignment */
+        }
+        .highlight {
+            background-color: yellow;
+            font-weight: bold;
+        }
+        .questions-container {
+            display: flex;
+            flex-direction: column; /* Stack questions vertically */
+            align-items: center;
+            width: 100%;
+        }
+        .print-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .print-button:hover {
+            background-color: #45a049;
+        }
+        .underline-input {
+            border-bottom: 2px solid #000;
+            display: inline-block;
+            width: 50px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+    </style>
+    <script>
+        function generateQuestion(index) {
+            const names = ["Swetha", "Nidhi", "Aarav", "Isha", "Rohan", "Maya"];
+            const items = ["gifts", "apples", "mangos", "bananas", "pens", "pencils"];
+            const name1 = names[Math.floor(Math.random() * names.length)];
+            let name2;
+            do {
+                name2 = names[Math.floor(Math.random() * names.length)];
+            } while (name1 === name2);
+
+            const item = items[Math.floor(Math.random() * items.length)];
+            const item1 = Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+            const item2 = Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+            const correctAnswer = item1 + item2;
+
+            const container = document.getElementById('questions-container');
+            const questionContainer = document.createElement('div');
+            questionContainer.className = 'container';
+            questionContainer.innerHTML = `<p><u>${name1}</u> has <span class="highlight">${item1}</span> ${item}, they got <span class="highlight">${item2}</span> more ${item} from <u>${name2}</u>, how many ${item} does <u>${name1}</u> have now?</p>`;
+
+            const input = document.createElement('span');
+            input.className = 'underline-input';
+            input.contentEditable = true;
+            input.onkeypress = function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    validateAnswer(input, correctAnswer, questionContainer);
+                }
+            };
+
+            questionContainer.appendChild(input);
+            const result = document.createElement('p');
+            result.className = 'result';
+            questionContainer.appendChild(result);
+            container.appendChild(questionContainer);
+        }
+
+        function validateAnswer(input, correctAnswer, container) {
+            const userAnswer = parseInt(input.innerText);
+            const result = container.querySelector('.result');
+            if (userAnswer === correctAnswer) {
+                result.innerHTML = `<span class="highlight">Correct!</span>`;
+                result.style.color = "green";
+            } else {
+                result.innerHTML = `<span class="highlight">Wrong!</span>`;
+                result.style.color = "red";
+            }
+        }
+
+        function printPage() {
+            window.print();
+        }
+
+        window.onload = function() {
+            for (let i = 1; i <= 10; i++) { // Changed from 5 to 10
+                generateQuestion(i);
+            }
+        };
+    </script>
+</head>
+<body>
+    <h1>Math Logical Questions</h1>
+    <button class="print-button" onclick="printPage()">Print</button>
+    <div id="questions-container" class="questions-container"></div>
+</body>
+</html>

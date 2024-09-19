@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Logical Question</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #808080; /* Default to gray */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            font-size: 1.2em;
+            color: #555;
+        }
+        .highlight {
+            background-color: yellow;
+            font-weight: bold;
+        }
+        .answer-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+        }
+        .answer-button:hover {
+            background-color: #45a049;
+        }
+        .dropdown {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+    <script>
+        let correctAnswer;
+
+        function generateQuestion() {
+            const names = ["Swetha", "Nidhi", "Aarav", "Isha", "Rohan", "Maya"];
+            const items = ["gifts", "apples", "mangos", "bananas", "pens", "pencils"];
+            const name1 = names[Math.floor(Math.random() * names.length)];
+            let name2;
+            do {
+                name2 = names[Math.floor(Math.random() * names.length)];
+            } while (name1 === name2);
+
+            const item = items[Math.floor(Math.random() * items.length)];
+            const item1 = Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+            const item2 = Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+            correctAnswer = item1 + item2;
+
+            document.getElementById('question').innerHTML = `<u>${name1}</u> has <span class="highlight">${item1}</span> ${item}, they got <span class="highlight">${item2}</span> more ${item} from <u>${name2}</u>, how many ${item} does <u>${name1}</u> have now?`;
+
+            const answers = generateAnswers(correctAnswer);
+            const form = document.getElementById('answerForm');
+            form.innerHTML = ''; // Clear previous answers
+
+            answers.forEach((answer, index) => {
+                const button = document.createElement('button');
+                button.className = 'answer-button';
+                button.textContent = answer;
+                button.onclick = () => validateAnswer(answer);
+
+                form.appendChild(button);
+            });
+        }
+
+        function generateAnswers(correctAnswer) {
+            const answers = new Set();
+            answers.add(correctAnswer);
+
+            while (answers.size < 5) {
+                const randomAnswer = Math.floor(Math.random() * 20) + 1; // Random number between 1 and 20
+                answers.add(randomAnswer);
+            }
+
+            return Array.from(answers).sort(() => Math.random() - 0.5); // Shuffle answers
+        }
+
+        function validateAnswer(selectedAnswer) {
+            const result = document.getElementById('result');
+            if (selectedAnswer === correctAnswer) {
+                result.innerHTML = `<span class="highlight">Correct!</span>`;
+                result.style.color = "green";
+            } else {
+                result.innerHTML = `<span class="highlight">Wrong!</span>`;
+                result.style.color = "red";
+            }
+        }
+
+        function changeBackgroundColor(color) {
+            document.body.style.backgroundColor = color;
+        }
+
+        window.onload = generateQuestion;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Math Logical Question</h1>
+        <div class="dropdown">
+            <label for="background-color">Background Color:</label>
+            <select id="background-color" onchange="changeBackgroundColor(this.value)">
+                <option value="#f0f8ff">White</option>
+                <option value="#000000">Black</option>
+                <option value="#808080" selected>Gray</option> <!-- Default to gray -->
+            </select>
+        </div>
+        <p id="question"></p>
+        <div id="answerForm"></div>
+        <p id="result"></p>
+    </div>
+</body>
+</html>
