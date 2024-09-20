@@ -20,6 +20,12 @@
             margin-top: 20px;
         }
 
+        .result-display {
+            font-size: 20px;
+            color: #333;
+            margin-left: 20px;
+        }
+
         .section {
             width: 80%;
             background: #fff;
@@ -99,7 +105,7 @@
 </head>
 <body>
 
-<h1>Math Exam</h1>
+<h1>Math Exam <span class="result-display" id="resultDisplay"></span></h1>
 
 <div id="divisionSection" class="section">
     <h2>Division Questions</h2>
@@ -139,7 +145,7 @@
             i = i + 1;
         }
         document.getElementById("CheckAnswers").disabled = true;
-        alert(marks + "/" + total_number_of_questions);
+        document.getElementById("resultDisplay").innerText = marks + "/" + total_number_of_questions;
     }
 
     function getRandomIntInclusive(min, max) {
