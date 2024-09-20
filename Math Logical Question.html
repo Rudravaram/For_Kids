@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math Logical Question</title>
+    <title>Math Logical Questions</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -21,6 +21,8 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
             position: relative;
+            overflow-y: auto;
+            max-height: 90vh;
         }
         h1 {
             color: #333;
@@ -53,9 +55,9 @@
         }
     </style>
     <script>
-        let correctAnswer;
+        let correctAnswers = [];
 
-        function generateQuestion() {
+        function generateQuestion(questionNumber) {
             const names = ["Swetha", "Nidhi", "Aarav", "Isha", "Rohan", "Maya"];
             const items = ["gifts", "apples", "mangos", "bananas", "pens", "pencils"];
             const name1 = names[Math.floor(Math.random() * names.length)];
@@ -67,19 +69,20 @@
             const item = items[Math.floor(Math.random() * items.length)];
             const item1 = Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
             const item2 = Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
-            correctAnswer = item1 + item2;
+            const correctAnswer = item1 + item2;
+            correctAnswers[questionNumber] = correctAnswer;
 
-            document.getElementById('question').innerHTML = `<u>${name1}</u> has <span class="highlight">${item1}</span> ${item}, they got <span class="highlight">${item2}</span> more ${item} from <u>${name2}</u>, how many ${item} does <u>${name1}</u> have now?`;
+            document.getElementById(`question${questionNumber}`).innerHTML = `<u>${name1}</u> has <span class="highlight">${item1}</span> ${item}, they got <span class="highlight">${item2}</span> more ${item} from <u>${name2}</u>, how many ${item} does <u>${name1}</u> have now?`;
 
             const answers = generateAnswers(correctAnswer);
-            const form = document.getElementById('answerForm');
+            const form = document.getElementById(`answerForm${questionNumber}`);
             form.innerHTML = ''; // Clear previous answers
 
-            answers.forEach((answer, index) => {
+            answers.forEach((answer) => {
                 const button = document.createElement('button');
                 button.className = 'answer-button';
                 button.textContent = answer;
-                button.onclick = () => validateAnswer(answer);
+                button.onclick = () => validateAnswer(answer, questionNumber);
 
                 form.appendChild(button);
             });
@@ -97,9 +100,9 @@
             return Array.from(answers).sort(() => Math.random() - 0.5); // Shuffle answers
         }
 
-        function validateAnswer(selectedAnswer) {
-            const result = document.getElementById('result');
-            if (selectedAnswer === correctAnswer) {
+        function validateAnswer(selectedAnswer, questionNumber) {
+            const result = document.getElementById(`result${questionNumber}`);
+            if (selectedAnswer === correctAnswers[questionNumber]) {
                 result.innerHTML = `<span class="highlight">Correct!</span>`;
                 result.style.color = "green";
             } else {
@@ -108,16 +111,22 @@
             }
         }
 
+        function generateQuestions() {
+            for (let i = 0; i < 5; i++) {
+                generateQuestion(i);
+            }
+        }
+
         function changeBackgroundColor(color) {
             document.body.style.backgroundColor = color;
         }
 
-        window.onload = generateQuestion;
+        window.onload = generateQuestions;
     </script>
 </head>
 <body>
     <div class="container">
-        <h1>Math Logical Question</h1>
+        <h1>Math Logical Questions</h1>
         <div class="dropdown">
             <label for="background-color">Background Color:</label>
             <select id="background-color" onchange="changeBackgroundColor(this.value)">
@@ -126,9 +135,33 @@
                 <option value="#808080" selected>Gray</option> <!-- Default to gray -->
             </select>
         </div>
-        <p id="question"></p>
-        <div id="answerForm"></div>
-        <p id="result"></p>
+        <div id="questions">
+            <div>
+                <p id="question0"></p>
+                <div id="answerForm0"></div>
+                <p id="result0"></p>
+            </div>
+            <div>
+                <p id="question1"></p>
+                <div id="answerForm1"></div>
+                <p id="result1"></p>
+            </div>
+            <div>
+                <p id="question2"></p>
+                <div id="answerForm2"></div>
+                <p id="result2"></p>
+            </div>
+            <div>
+                <p id="question3"></p>
+                <div id="answerForm3"></div>
+                <p id="result3"></p>
+            </div>
+            <div>
+                <p id="question4"></p>
+                <div id="answerForm4"></div>
+                <p id="result4"></p>
+            </div>
+        </div>
     </div>
 </body>
 </html>

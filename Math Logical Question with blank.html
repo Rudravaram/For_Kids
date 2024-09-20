@@ -30,6 +30,7 @@
         }
         h1 {
             color: #333;
+            font-size: 1.5em; /* Adjust font size for better readability on mobile */
         }
         p {
             font-size: 1.2em;
@@ -68,6 +69,39 @@
             text-align: center;
             font-size: 1.2em;
         }
+        @media print {
+            .print-button {
+                display: none;
+            }
+            body {
+                padding-top: 0;
+            }
+        }
+        @media (max-width: 600px) {
+            body {
+                height: auto;
+                padding: 20px;
+            }
+            .container {
+                width: 100%;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .print-button {
+                position: static;
+                margin-bottom: 20px;
+            }
+            h1 {
+                font-size: 1.2em;
+            }
+            p {
+                font-size: 1em;
+            }
+            .underline-input {
+                width: 100%;
+                font-size: 1em;
+            }
+        }
     </style>
     <script>
         function generateQuestion(index) {
@@ -87,7 +121,7 @@
             const container = document.getElementById('questions-container');
             const questionContainer = document.createElement('div');
             questionContainer.className = 'container';
-            questionContainer.innerHTML = `<p><u>${name1}</u> has <span class="highlight">${item1}</span> ${item}, they got <span class="highlight">${item2}</span> more ${item} from <u>${name2}</u>, how many ${item} does <u>${name1}</u> have now?</p>`;
+            questionContainer.innerHTML = `<p><u>${name1}</u> has <span class="highlight">${item1}</span> ${item}, ${name1} got <span class="highlight">${item2}</span> more ${item} from <u>${name2}</u>, how many ${item} does <u>${name1}</u> have now?</p>`;
 
             const input = document.createElement('span');
             input.className = 'underline-input';

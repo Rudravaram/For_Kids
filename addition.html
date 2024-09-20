@@ -26,12 +26,19 @@
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .question {
             margin: 10px 0;
             padding: 10px;
             border-bottom: 1px solid #ddd;
+            flex: 1 1 calc(33.333% - 20px);
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
         }
 
         .question span {
@@ -51,7 +58,7 @@
 
         .result {
             font-size: 16px;
-            margin-top: 10px;
+            margin-left: 10px;
         }
 
         #CheckAnswers {
@@ -61,20 +68,62 @@
             border: none;
             cursor: pointer;
             font-size: 16px;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
+            margin: 20px auto;
+            display: block;
         }
 
         #CheckAnswers:disabled {
             background-color: #ccc;
             cursor: not-allowed;
         }
+
+        #PrintButton {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .score.good {
+            color: green;
+        }
+
+        .score.average {
+            color: orange;
+        }
+
+        .score.poor {
+            color: red;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+            }
+            #PrintButton, #CheckAnswers {
+                display: none;
+            }
+            .question {
+                flex: 1 1 calc(33.333% - 20px);
+                display: flex;
+                align-items: center;
+            }
+        }
     </style>
 </head>
 <body>
 
+<button id="PrintButton" onClick="window.print()">Print</button>
 <h1>Addition Exam</h1>
 
 <div id="QuestionPaper"></div>
@@ -103,7 +152,18 @@
             i = i + 1;
         }
         document.getElementById("CheckAnswers").disabled = true;
-        alert(marks + "/" + total_number_of_questions);
+
+        var scoreElement = document.createElement('span');
+        scoreElement.classList.add('score');
+        if (marks / total_number_of_questions >= 0.8) {
+            scoreElement.classList.add('good');
+        } else if (marks / total_number_of_questions >= 0.5) {
+            scoreElement.classList.add('average');
+        } else {
+            scoreElement.classList.add('poor');
+        }
+        scoreElement.innerText = " - Score: " + marks + "/" + total_number_of_questions;
+        document.querySelector("h1").appendChild(scoreElement);
     }
 
     function getRandomIntInclusive(min, max) {
@@ -144,7 +204,7 @@
         }
     }
 
-    DesignQuestionPaper(20, '+', 100, 900, 100, 100);
+    DesignQuestionPaper(20, '+', 100, 900, 100, 900);
 </script>
 
 </body>

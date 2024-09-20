@@ -18,6 +18,8 @@
         h1 {
             color: #333;
             margin-top: 20px;
+            text-align: center;
+            width: 100%;
         }
 
         #QuestionPaper {
@@ -26,6 +28,9 @@
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
         }
 
         .question {
@@ -62,17 +67,35 @@
             cursor: pointer;
             font-size: 16px;
             margin-bottom: 20px;
-        }to
+        }
 
         #CheckAnswers:disabled {
             background-color: #ccc;
             cursor: not-allowed;
         }
+
+        #score {
+            font-size: 18px;
+            color: #333;
+        }
+
+        #printButton {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
 
-<h1>Substraction Exam</h1>
+<button id="printButton" onClick="window.print()">Print</button>
+<h1>Subtraction Exam <span id="score"></span></h1>
 
 <div id="QuestionPaper"></div>
 <input type="button" onClick="CheckAnswers()" id="CheckAnswers" value="Check Answers">
@@ -100,7 +123,7 @@
             i = i + 1;
         }
         document.getElementById("CheckAnswers").disabled = true;
-        alert(marks + "/" + total_number_of_questions);
+        document.getElementById("score").innerText = "Score: " + marks + "/" + total_number_of_questions;
     }
 
     function getRandomIntInclusive(min, max) {
@@ -116,13 +139,11 @@
             var num1 = getRandomIntInclusive(minNum1, maxNum1);
             var num2 = getRandomIntInclusive(minNum2, maxNum2);
 
-		if ( ( (operation === '-') || (operation === '/') ) && num2 > num1)
-		{
-			var num = num1;
-			num1 = num2;
-			num2 = num;
-		}	
-
+            if ((operation === '-' || operation === '/') && num2 > num1) {
+                var num = num1;
+                num1 = num2;
+                num2 = num;
+            }
 
             var ans = 0;
             if (operation === '*')
@@ -133,7 +154,7 @@
                 ans = num1 - num2;
             if (operation === '/')
                 ans = num1 / num2;
-        	ans= parseFloat(ans).toFixed(3).slice(0,-1);
+            ans = parseFloat(ans).toFixed(3).slice(0, -1);
             var id1 = "user_answer" + total_number_of_questions;
             var id2 = "correct_answer" + total_number_of_questions;
             var resultId = "result" + total_number_of_questions;
@@ -143,10 +164,7 @@
         }
     }
 
-      
-        DesignQuestionPaper(20, '-', 100, 900, 100, 900);
-         
-
+    DesignQuestionPaper(20, '-', 100, 900, 100, 900);
 </script>
 
 </body>

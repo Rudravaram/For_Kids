@@ -20,6 +20,12 @@
             margin-top: 20px;
         }
 
+        #resultDisplay {
+            font-size: 20px;
+            color: #4CAF50;
+            margin-left: 10px;
+        }
+
         #QuestionPaper {
             width: 80%;
             background: #fff;
@@ -28,10 +34,17 @@
             margin-bottom: 20px;
         }
 
+        .question-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
         .question {
-            margin: 10px 0;
+            margin: 10px;
             padding: 10px;
             border-bottom: 1px solid #ddd;
+            flex: 1;
         }
 
         .question span {
@@ -43,6 +56,9 @@
             padding: 5px;
             font-size: 16px;
             width: 50px;
+            border: none;
+            border-bottom: 1px solid #000;
+            outline: none;
         }
 
         .question input[type="text"].wrong {
@@ -61,21 +77,32 @@
             border: none;
             cursor: pointer;
             font-size: 16px;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
+            margin: 20px auto;
+            display: block;
         }
 
         #CheckAnswers:disabled {
             background-color: #ccc;
             cursor: not-allowed;
         }
+
+        #printButton {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
 
-<h1>Division Exam</h1>
+<button id="printButton" onclick="window.print()">Print</button>
+<h1>Division Exam<span id="resultDisplay"></span></h1>
 
 <div id="QuestionPaper"></div>
 <input type="button" onClick="CheckAnswers()" id="CheckAnswers" value="Check Answers">
@@ -103,7 +130,7 @@
             i = i + 1;
         }
         document.getElementById("CheckAnswers").disabled = true;
-        alert(marks + "/" + total_number_of_questions);
+        document.getElementById("resultDisplay").innerText = " - Score: " + marks + "/" + total_number_of_questions;
     }
 
     function getRandomIntInclusive(min, max) {
@@ -114,6 +141,8 @@
 
     function DesignQuestionPaper(questionCount, operation, minNum1, maxNum1, minNum2, maxNum2) {
         var i = 1;
+        var questionContainer = document.createElement('div');
+        questionContainer.className = 'question-container';
         while (i <= questionCount) {
             total_number_of_questions = total_number_of_questions + 1;
             var num1 = getRandomIntInclusive(minNum1, maxNum1);
@@ -138,7 +167,13 @@
             var id2 = "correct_answer" + total_number_of_questions;
             var resultId = "result" + total_number_of_questions;
             var question = "<div class='question'><span>" + num1 + " " + operation + " " + num2 + " = </span> <input type='text' id='" + id1 + "' /> <input type='text' hidden value='" + ans + "' id='" + id2 + "' /> <span class='result' id='" + resultId + "'></span></div>";
-            document.getElementById("QuestionPaper").innerHTML += question;
+            questionContainer.innerHTML += question;
+
+            if (i % 3 === 0 || i === questionCount) {
+                document.getElementById("QuestionPaper").appendChild(questionContainer);
+                questionContainer = document.createElement('div');
+                questionContainer.className = 'question-container';
+            }
             i = i + 1;
         }
     }

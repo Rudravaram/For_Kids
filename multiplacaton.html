@@ -20,6 +20,14 @@
         h1 {
             color: #333;
             margin-top: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        #results {
+            margin-left: 20px;
+            font-size: 18px;
+            color: #333;
         }
 
         #QuestionPaper {
@@ -28,12 +36,17 @@
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .question {
             margin: 10px 0;
             padding: 10px;
             border-bottom: 1px solid #ddd;
+            flex: 1 1 calc(33.33% - 20px); /* Adjust the width of each question */
+            box-sizing: border-box;
         }
 
         .question span {
@@ -45,6 +58,9 @@
             padding: 5px;
             font-size: 16px;
             width: 50px;
+            border: none;
+            border-bottom: 1px solid #000;
+            background: none;
         }
 
         .question input[type="text"].wrong {
@@ -79,10 +95,42 @@
             background-color: #ccc;
             cursor: not-allowed;
         }
+
+        .print-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+        }
+
+        @media print {
+            .print-button, .button-container {
+                display: none;
+            }
+            .question {
+                display: flex;
+                align-items: center;
+            }
+            .question input[type="text"] {
+                border: none;
+                border-bottom: 1px solid #000;
+                width: 100px;
+                background: none;
+                padding: 0;
+                font-size: 16px;
+                margin-left: 10px;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Multiplication Quiz</h1>
+    <button class="print-button" onclick="window.print()">Print</button>
+    <h1>Multiplication Quiz <span id="results"></span></h1>
     <div id="QuestionPaper">
         <!-- Questions will go here -->
     </div>
@@ -123,7 +171,7 @@
                 i = i + 1;
             }
             document.getElementById("CheckAnswers").disabled = true;
-            alert(marks + "/" + total_number_of_questions);
+            document.getElementById("results").innerText = "You scored " + marks + "/" + total_number_of_questions;
         }
 
         function getRandomIntInclusive(min, max) {
