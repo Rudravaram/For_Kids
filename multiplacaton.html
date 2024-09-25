@@ -112,9 +112,15 @@
             .print-button, .button-container {
                 display: none;
             }
+            #QuestionPaper {
+                display: flex;
+                flex-wrap: wrap;
+            }
             .question {
                 display: flex;
                 align-items: center;
+                flex: 1 1 calc(50% - 20px); /* Adjust the width to fit two questions per line */
+                box-sizing: border-box;
             }
             .question input[type="text"] {
                 border: none;
@@ -131,9 +137,29 @@
 <body>
     <button class="print-button" onclick="window.print()">Print</button>
     <h1>Multiplication Quiz <span id="results"></span></h1>
+    
+    <div>
+        <label for="num1Digits">Digits for first number:</label>
+        <select id="num1Digits">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
+        
+        <label for="num2Digits">Digits for second number:</label>
+        <select id="num2Digits">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+        </select>
+        
+        <button onclick="generateQuestions()">Generate Questions</button>
+    </div>
+    
     <div id="QuestionPaper">
         <!-- Questions will go here -->
     </div>
+    
     <div class="button-container">
         <button onclick="checkAnswers()" id="CheckAnswers">Check Answers</button>
     </div>
@@ -180,7 +206,21 @@
             return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
         }
 
+        function generateQuestions() {
+            var num1Digits = parseInt(document.getElementById("num1Digits").value);
+            var num2Digits = parseInt(document.getElementById("num2Digits").value);
+            
+            var minNum1 = Math.pow(10, num1Digits - 1);
+            var maxNum1 = Math.pow(10, num1Digits) - 1;
+            var minNum2 = Math.pow(10, num2Digits - 1);
+            var maxNum2 = Math.pow(10, num2Digits) - 1;
+            
+            DesignQuestionPaper(20, '*', minNum1, maxNum1, minNum2, maxNum2);
+        }
+
         function DesignQuestionPaper(questionCount, operation, minNum1, maxNum1, minNum2, maxNum2) {
+            document.getElementById("QuestionPaper").innerHTML = ""; // Clear previous questions
+            total_number_of_questions = 0;
             var i = 1;
             while (i <= questionCount) {
                 total_number_of_questions = total_number_of_questions + 1;
@@ -211,8 +251,6 @@
                 i = i + 1;
             }
         }
-
-        DesignQuestionPaper(20, '*', 10, 90, 1, 10);
     </script>
 </body>
 </html>
