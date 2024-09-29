@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Logical Questions for Year 5</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question h3 {
+            margin: 0;
+        }
+        .result {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Math Logical Questions for Year 5</h1>
+    
+    <div class="question">
+        <h3>Question 1:</h3>
+        <p>If you have 3 apples and you take away 2, how many do you have?</p>
+        <input type="text" id="answer1">
+    </div>
+    
+    <div class="question">
+        <h3>Question 2:</h3>
+        <p>What is the next number in the sequence: 2, 4, 6, 8, ...?</p>
+        <input type="text" id="answer2">
+    </div>
+    
+    <div class="question">
+        <h3>Question 3:</h3>
+        <p>Tom has twice as many marbles as Jerry. If Jerry has 5 marbles, how many marbles does Tom have?</p>
+        <input type="text" id="answer3">
+    </div>
+    
+    <div class="question">
+        <h3>Question 4:</h3>
+        <p>There are 10 birds on a tree. If 3 fly away, how many are left?</p>
+        <input type="text" id="answer4">
+    </div>
+    
+    <div class="question">
+        <h3>Question 5:</h3>
+        <p>What is the sum of the angles in a triangle?</p>
+        <input type="text" id="answer5">
+    </div>
+    
+    <button onclick="checkAnswers()">Check Answers</button>
+    
+    <div id="results" class="result"></div>
+
+    <script>
+        function checkAnswers() {
+            const answers = [1, 10, 10, 7, 180];
+            const userAnswers = [
+                document.getElementById('answer1').value,
+                document.getElementById('answer2').value,
+                document.getElementById('answer3').value,
+                document.getElementById('answer4').value,
+                document.getElementById('answer5').value
+            ];
+            
+            let results = '';
+            for (let i = 0; i < answers.length; i++) {
+                if (parseInt(userAnswers[i]) === answers[i]) {
+                    results += `Question ${i + 1}: Correct<br>`;
+                } else {
+                    results += `Question ${i + 1}: Incorrect<br>`;
+                }
+            }
+            
+            document.getElementById('results').innerHTML = results;
+        }
+    </script>
+</body>
+</html>
