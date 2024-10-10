@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .result-display {
+            font-size: 20px;
+            color: #333;
+            margin-left: 20px;
+        }
+
+        .section {
+            width: 80%;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .question {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            flex: 1 1 calc(33.333% - 20px);
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+        }
+
+        .question span {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        .question input[type="text"] {
+            padding: 5px;
+            font-size: 16px;
+            width: 50px;
+        }
+
+        .question input[type="text"].wrong {
+            background-color: #ffcccc;
+        }
+
+        .result {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        #CheckAnswers {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 40px;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+
+        #CheckAnswers:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        #printButton {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        @media (max-width: 600px) {
+            #CheckAnswers {
+                width: 100%;
+                padding: 15px;
+                font-size: 18px;
+                bottom: 0;
+                right: 0;
+                left: 0;
+            }
+
+            .question {
+                flex: 1 1 100%;
+            }
+        }
+
+        @media print {
+            .section {
+                page-break-before: always;
+            }
+            .section:first-of-type {
+                page-break-before: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Math Exam <span class="result-display" id="resultDisplay"></span></h1>
+
+<div>
+    <label for="num1Digits">Number of digits for first number:</label>
+    <select id="num1Digits">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    <label for="num2Digits">Number of digits for second number:</label>
+    <select id="num2Digits">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    <button onClick="generateQuestions()">Generate Questions</button>
+</div>
+
+<button id="printButton" onClick="window.print()">Print</button>
+
+<div id="divisionSection" class="section">
+    <h2>Division Questions</h2>
+</div>
+<div id="additionSection" class="section">
+    <h2>Addition Questions</h2>
+</div>
+<div id="subtractionSection" class="section">
+    <h2>Subtraction Questions</h2>
+</div>
+<div id="multiplicationSection" class="section">
+    <h2>Multiplication Questions</h2>
+</div>
+
+<input type="button" onClick="CheckAnswers()" id="CheckAnswers" value="Check Answers">
+
+<script>
+    var total_number_of_questions = 0;
+
+    function CheckAnswers() {
+        var i = 1;
+        var marks = 0;
+        while (i <= total_number_of_questions) {
+            var id1 = "user_answer" + i;
+            var id2 = "correct_answer" + i;
+            var userAns = parseFloat(document.getElementById(id1).value);
+            var correctAns = parseFloat(document.getElementById(id2).value);
+            var resultId = "result" + i;
+            if (userAns === correctAns) {
+                marks = marks + 1;
+                document.getElementById(id1).classList.remove('wrong');
+                document.getElementById(resultId).innerText = "Correct!";
+            } else {
+                document.getElementById(id1).classList.add('wrong');
+                document.getElementById(resultId).innerText = "X! Correct answer: " + correctAns;
+            }
+            i = i + 1;
+        }
+        document.getElementById("CheckAnswers").disabled = true;
+        document.getElementById("resultDisplay").innerText = marks + "/" + total_number_of_questions;
+    }
+
+    function getRandomIntInclusive(min, max) {
+        const minCeiled = Math.ceil(min);
+        const maxFloored = Math.floor(max);
+        return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
+    }
+
+    function DesignQuestionPaper(questionCount, operation, minNum1, maxNum1, minNum2, maxNum2, sectionId) {
+        var i = 1;
+        while (i <= questionCount) {
+            total_number_of_questions = total_number_of_questions + 1;
+            var num1 = getRandomIntInclusive(minNum1, maxNum1);
+            var num2 = getRandomIntInclusive(minNum2, maxNum2);
+
+            if ((operation === '-' || operation === '/') && num2 > num1) {
+                var num = num1;
+                num1 = num2;
+                num2 = num;
+            }
+
+            var ans = 0;
+            if (operation === '*')
+                ans = num1 * num2;
+            if (operation === '+')
+                ans = num1 + num2;
+            if (operation === '-')
+                ans = num1 - num2;
+            if (operation === '/')
+                ans = num1 / num2;
+            else
+                ans = parseFloat(ans).toFixed(0);
+
+            var id1 = "user_answer" + total_number_of_questions;
+            var id2 = "correct_answer" + total_number_of_questions;
+            var resultId = "result" + total_number_of_questions;
+            var question = "<div class='question'><span>" + num1 + " " + operation + " " + num2 + " = </span> <input type='text' id='" + id1 + "' /> <input type='text' hidden value='" + ans + "' id='" + id2 + "' /> <span class='result' id='" + resultId + "'></span></div>";
+            document.getElementById(sectionId).innerHTML += question;
+            i = i + 1;
+        }
+    }
+
+    function generateQuestions() {
+        var num1Digits = parseInt(document.getElementById('num1Digits').value);
+        var num2Digits = parseInt(document.getElementById('num2Digits').value);
+
+        var minNum1 = Math.pow(10, num1Digits - 1);
+        var maxNum1 = Math.pow(10, num1Digits) - 1;
+        var minNum2 = Math.pow(10, num2Digits - 1);
+        var maxNum2 = Math.pow(10, num2Digits) - 1;
+
+        document.getElementById('divisionSection').innerHTML = '<h2>Division Questions</h2>';
+        document.getElementById('additionSection').innerHTML = '<h2>Addition Questions</h2>';
+        document.getElementById('subtractionSection').innerHTML = '<h2>Subtraction Questions</h2>';
+        document.getElementById('multiplicationSection').innerHTML = '<h2>Multiplication Questions</h2>';
+
+        total_number_of_questions = 0;
+
+        DesignQuestionPaper(20, '/', minNum1, maxNum1, minNum2, maxNum2, 'divisionSection');
+        DesignQuestionPaper(20, '+', minNum1, maxNum1, minNum2, maxNum2, 'additionSection');
+        DesignQuestionPaper(20, '-', minNum1, maxNum1, minNum2, maxNum2, 'subtractionSection');
+        DesignQuestionPaper(20, '*', minNum1, maxNum1, minNum2, maxNum2, 'multiplicationSection');
+    }
+
+    generateQuestions();
+</script>
+
+</body>
+</html>
