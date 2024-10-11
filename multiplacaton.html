@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -45,7 +44,7 @@
             margin: 10px 0;
             padding: 10px;
             border-bottom: 1px solid #ddd;
-            flex: 1 1 calc(33.33% - 20px); /* Adjust the width of each question */
+            flex: 1 1 calc(33.33% - 20px);
             box-sizing: border-box;
         }
 
@@ -65,10 +64,6 @@
 
         .question input[type="text"].wrong {
             background-color: #ffcccc;
-        }
-
-        .result {
-            /* Existing styles */
         }
 
         .button-container {
@@ -119,7 +114,7 @@
             .question {
                 display: flex;
                 align-items: center;
-                flex: 1 1 calc(50% - 20px); /* Adjust the width to fit two questions per line */
+                flex: 1 1 calc(50% - 20px);
                 box-sizing: border-box;
             }
             .question input[type="text"] {
@@ -158,6 +153,10 @@
     
     <div id="QuestionPaper">
         <!-- Questions will go here -->
+    </div>
+    
+    <div id="AnswersSection">
+        <!-- Answers will go here -->
     </div>
     
     <div class="button-container">
@@ -220,6 +219,7 @@
 
         function DesignQuestionPaper(questionCount, operation, minNum1, maxNum1, minNum2, maxNum2) {
             document.getElementById("QuestionPaper").innerHTML = ""; // Clear previous questions
+            document.getElementById("AnswersSection").innerHTML = "<h2>Answers</h2>"; // Clear previous answers
             total_number_of_questions = 0;
             var i = 1;
             while (i <= questionCount) {
@@ -227,27 +227,14 @@
                 var num1 = getRandomIntInclusive(minNum1, maxNum1);
                 var num2 = getRandomIntInclusive(minNum2, maxNum2);
 
-                if ((operation === '-') || (operation === '/') && num2 > num1) {
-                    var num = num1;
-                    num1 = num2;
-                    num2 = num;
-                }
-
-                var ans = 0;
-                if (operation === '*')
-                    ans = num1 * num2;
-                if (operation === '+')
-                    ans = num1 + num2;
-                if (operation === '-')
-                    ans = num1 - num2;
-                if (operation === '/')
-                    ans = num1 / num2;
+                var ans = num1 * num2;
                 ans = Math.round(ans);
                 var id1 = "user_answer" + total_number_of_questions;
                 var id2 = "correct_answer" + total_number_of_questions;
                 var resultId = "result" + total_number_of_questions;
                 var question = "<div class='question'><span>" + num1 + " " + operation + " " + num2 + " = </span> <input type='text' id='" + id1 + "' /> <input type='text' hidden value='" + ans + "' id='" + id2 + "' /> <span class='result' id='" + resultId + "'></span></div>";
                 document.getElementById("QuestionPaper").innerHTML += question;
+                document.getElementById("AnswersSection").innerHTML += "<span>" + num1 + " " + operation + " " + num2 + " = " + ans + "</span>&emsp;&emsp;&emsp;";
                 i = i + 1;
             }
         }
