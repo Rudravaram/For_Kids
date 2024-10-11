@@ -133,19 +133,13 @@
 <div>
     <label for="num1Digits">Number of digits for first number:</label>
     <select id="num1Digits">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
+        <option value="10">1-10</option>
+        <option value="20">1-20</option>
     </select>
     <label for="num2Digits">Number of digits for second number:</label>
     <select id="num2Digits">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
+        <option value="10">1-10</option>
+        <option value="20">1-20</option>
     </select>
     <button onClick="generateQuestions()">Generate Questions</button>
 </div>
@@ -237,10 +231,47 @@
         var num1Digits = parseInt(document.getElementById('num1Digits').value);
         var num2Digits = parseInt(document.getElementById('num2Digits').value);
 
-        var minNum1 = Math.pow(10, num1Digits - 1);
-        var maxNum1 = Math.pow(10, num1Digits) - 1;
-        var minNum2 = Math.pow(10, num2Digits - 1);
-        var maxNum2 = Math.pow(10, num2Digits) - 1;
+        var minNum1, maxNum1, minNum2, maxNum2;
+
+        if (num1Digits === 10) {
+            minNum1 = 1;
+            maxNum1 = 10;
+        } else if (num1Digits === 20) {
+            minNum1 = 1;
+            maxNum1 = 20;
+        } else if (num1Digits === 30) {
+            minNum1 = 1;
+            maxNum1 = 30;
+        } else if (num1Digits === 40) {
+            minNum1 = 1;
+            maxNum1 = 40;
+        } else if (num1Digits === 50) {
+            minNum1 = 1;
+            maxNum1 = 50;
+        } else {
+            minNum1 = Math.pow(10, num1Digits - 1);
+            maxNum1 = Math.pow(10, num1Digits) - 1;
+        }
+
+        if (num2Digits === 10) {
+            minNum2 = 1;
+            maxNum2 = 10;
+        } else if (num2Digits === 20) {
+            minNum2 = 1;
+            maxNum2 = 20;
+        } else if (num2Digits === 30) {
+            minNum2 = 1;
+            maxNum2 = 30;
+        } else if (num2Digits === 40) {
+            minNum2 = 1;
+            maxNum2 = 40;
+        } else if (num2Digits === 50) {
+            minNum2 = 1;
+            maxNum2 = 50;
+        } else {
+            minNum2 = Math.pow(10, num2Digits - 1);
+            maxNum2 = Math.pow(10, num2Digits) - 1;
+        }
 
         document.getElementById('divisionSection').innerHTML = '<h2>Division Questions</h2>';
         document.getElementById('additionSection').innerHTML = '<h2>Addition Questions</h2>';
