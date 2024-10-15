@@ -206,20 +206,20 @@
             var num1 = getRandomIntInclusive(minNum1, maxNum1);
             var num2 = getRandomIntInclusive(minNum2, maxNum2);
 
-            if ((operation === '-' || operation === '/') && num2 > num1) {
+            if ((operation === '-' || operation === '÷') && num2 > num1) {
                 var num = num1;
                 num1 = num2;
                 num2 = num;
             }
 
             var ans = 0;
-            if (operation === '*')
+            if (operation === 'X')
                 ans = num1 * num2;
             if (operation === '+')
                 ans = num1 + num2;
             if (operation === '-')
                 ans = num1 - num2;
-            if (operation === '/')
+            if (operation === '÷')
                 ans = num1 / num2;
             else
                 ans = parseFloat(ans).toFixed(0);
@@ -249,10 +249,10 @@
 
         total_number_of_questions = 0;
 
-        DesignQuestionPaper(20, '/', minNum1, maxNum1, minNum2, maxNum2, 'divisionSection');
+        DesignQuestionPaper(20, '÷', minNum1, maxNum1, minNum2, maxNum2, 'divisionSection');
         DesignQuestionPaper(20, '+', minNum1, maxNum1, minNum2, maxNum2, 'additionSection');
         DesignQuestionPaper(20, '-', minNum1, maxNum1, minNum2, maxNum2, 'subtractionSection');
-        DesignQuestionPaper(20, '*', minNum1, maxNum1, minNum2, maxNum2, 'multiplicationSection');
+        DesignQuestionPaper(20, 'X', minNum1, maxNum1, minNum2, maxNum2, 'multiplicationSection');
     }
 
     generateQuestions();

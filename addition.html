@@ -131,8 +131,35 @@
 <button id="PrintButton" onClick="window.print()">Print</button>
 <h1>Addition Exam</h1>
 
+<div>
+    <label for="digits1">Number of digits for first number:</label>
+    <select id="digits1">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+
+    <label for="digits2">Number of digits for second number:</label>
+    <select id="digits2">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+</div>
+
+<button onClick="generateQuestions()">Generate Questions</button>
+
 <div id="QuestionPaper"></div>
 <input type="button" onClick="CheckAnswers()" id="CheckAnswers" value="Check Answers">
+
+<div id="AnswersSection">
+    <h2>Answers:</h2>
+    <div id="Answers"></div>
+</div>
 
 <script>
     var total_number_of_questions = 0;
@@ -177,39 +204,41 @@
         return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
     }
 
-    function DesignQuestionPaper(questionCount, operation, minNum1, maxNum1, minNum2, maxNum2) {
+    function DesignQuestionPaper(questionCount, minNum1, maxNum1, minNum2, maxNum2) {
         var i = 1;
+        var answers = "";
         while (i <= questionCount) {
             total_number_of_questions = total_number_of_questions + 1;
             var num1 = getRandomIntInclusive(minNum1, maxNum1);
             var num2 = getRandomIntInclusive(minNum2, maxNum2);
 
-            if ((operation === '-') || (operation === '/') && num2 > num1) {
-                var num = num1;
-                num1 = num2;
-                num2 = num;
-            }
-
-            var ans = 0;
-            if (operation === '*')
-                ans = num1 * num2;
-            if (operation === '+')
-                ans = num1 + num2;
-            if (operation === '-')
-                ans = num1 - num2;
-            if (operation === '/')
-                ans = num1 / num2;
+            var ans = num1 + num2;
             ans = Math.round(ans);
             var id1 = "user_answer" + total_number_of_questions;
             var id2 = "correct_answer" + total_number_of_questions;
             var resultId = "result" + total_number_of_questions;
-            var question = "<div class='question'><span>" + num1 + " " + operation + " " + num2 + " = </span> <input type='text' id='" + id1 + "' /> <input type='text' hidden value='" + ans + "' id='" + id2 + "' /> <span class='result' id='" + resultId + "'></span></div>";
+            var question = "<div class='question'><span>" + num1 + " + " + num2 + " = </span> <input type='text' id='" + id1 + "' /> <input type='text' hidden value='" + ans + "' id='" + id2 + "' /> <span class='result' id='" + resultId + "'></span></div>";
             document.getElementById("QuestionPaper").innerHTML += question;
+            answers += "    " + num1 + " + " + num2 + " = " + ans + "<br>";
             i = i + 1;
         }
+        document.getElementById("Answers").innerHTML = answers;
     }
 
-    DesignQuestionPaper(20, '+', 100, 900, 100, 900);
+    function generateQuestions() {
+        var digits1 = parseInt(document.getElementById("digits1").value);
+        var digits2 = parseInt(document.getElementById("digits2").value);
+
+        var minNum1 = Math.pow(10, digits1 - 1);
+        var maxNum1 = Math.pow(10, digits1) - 1;
+        var minNum2 = Math.pow(10, digits2 - 1);
+        var maxNum2 = Math.pow(10, digits2) - 1;
+
+        document.getElementById("QuestionPaper").innerHTML = ""; // Clear previous questions
+        total_number_of_questions = 0; // Reset question count
+
+        DesignQuestionPaper(20, minNum1, maxNum1, minNum2, maxNum2);
+    }
 </script>
 
 </body>
