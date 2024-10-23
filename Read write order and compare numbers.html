@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Number Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #D3D3FF;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .result-display {
+            font-size: 20px;
+            color: #333;
+            margin: 20px;
+        }
+
+        .button-container {
+            margin: 20px;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .section {
+            width: 80%;
+            background: #D3D3FF;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: none;
+            flex-wrap: wrap;
+        }
+
+        .section h3 {
+            color: #333;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .result {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            flex: 1 1 calc(33.333% - 20px);
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Random Number Generator</h1>
+    <div class="result-display" id="randomNumber">Click the button to generate a number</div>
+    <div class="button-container">
+        <button onclick="generateRandomNumber()">Generate Random Number</button>
+        <button onclick="orderDigits()">Order Digits</button>
+        <button onclick="compareDigits()">Compare Digits</button>
+        <button onclick="readRandomNumber()">Read Random Number</button>
+    </div>
+    <div class="section" id="resultsSection">
+        <h3>Results</h3>
+        <div class="result" id="orderedDigits"></div>
+        <div class="result" id="comparisonResult"></div>
+        <div class="result" id="numberInWords"></div>
+    </div>
+
+    <script>
+        function generateRandomNumber() {
+            const randomNumber = Math.floor(Math.random() * 1000000) + 1;
+            document.getElementById('randomNumber').innerText = randomNumber;
+            document.getElementById('resultsSection').style.display = 'none';
+        }
+
+        function orderDigits() {
+            const number = document.getElementById('randomNumber').innerText;
+            if (isNaN(number)) return;
+            const orderedDigits = number.split('').sort().join('');
+            document.getElementById('orderedDigits').innerText = `Ordered Digits: ${orderedDigits}`;
+            document.getElementById('resultsSection').style.display = 'flex';
+        }
+
+        function compareDigits() {
+            const number = document.getElementById('randomNumber').innerText;
+            if (isNaN(number)) return;
+            const digits = number.split('').map(Number);
+            const maxDigit = Math.max(...digits);
+            const minDigit = Math.min(...digits);
+            document.getElementById('comparisonResult').innerText = `Max Digit: ${maxDigit}, Min Digit: ${minDigit}`;
+            document.getElementById('resultsSection').style.display = 'flex';
+        }
+
+        function readRandomNumber() {
+            const number = document.getElementById('randomNumber').innerText;
+            if (isNaN(number)) return;
+            const numberInWords = convertNumberToWords(Number(number));
+            document.getElementById('numberInWords').innerText = `Number in Words: ${numberInWords}`;
+            document.getElementById('resultsSection').style.display = 'flex';
+        }
+
+        function convertNumberToWords(num) {
+            const a = [
+                '', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+                'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'
+            ];
+            const b = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+            const g = ['', 'thousand', 'million', 'billion', 'trillion'];
+
+            const makeGroup = ([ones, tens, huns]) => {
+                return [
+                    huns === 0 ? '' : a[huns] + ' hundred ',
+                    tens === 0 ? '' : b[tens] + (ones === 0 ? '' : '-'),
+                    a[tens === 1 ? ones + 10 : ones]
+                ].join('');
+            };
+
+            const thousand = (group, i) => group === '' ? group : `${group} ${g[i]}`;
+
+            if (typeof num === 'number') return convertNumberToWords(String(num));
+            if (num === '0') return 'zero';
+            return num
+                .split('')
+                .reverse()
+                .map(Number)
+                .map((n, i, a) => i % 3 === 0 ? makeGroup(a.slice(i, i + 3)) : '')
+                .map(thousand)
+                .filter(Boolean)
+                .reverse()
+                .join(' ');
+        }
+    </script>
+</body>
+</html>
