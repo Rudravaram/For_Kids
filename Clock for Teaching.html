@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teaching Clocks</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .clock {
+            width: 150px;
+            height: 150px;
+            border: 5px solid black;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .clock::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: black;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+        }
+
+        .hand {
+            width: 50%;
+            height: 2px;
+            background: black;
+            position: absolute;
+            top: 50%;
+            transform-origin: 100%;
+            transform: rotate(90deg);
+        }
+
+        .options {
+            margin-top: 20px;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="clock" id="clock1"></div>
+        <div class="clock" id="clock2"></div>
+        <div class="clock" id="clock3"></div>
+    </div>
+    <div class="options">
+        <button onclick="setTime(1)">Option 1</button>
+        <button onclick="setTime(2)">Option 2</button>
+        <button onclick="setTime(3)">Option 3</button>
+        <button onclick="setTime(4)">Option 4</button>
+    </div>
+    <script>
+        function setTime(option) {
+            const times = {
+                1: ['10:10', '2:30', '6:45'],
+                2: ['3:15', '7:20', '11:50'],
+                3: ['1:05', '4:40', '8:25'],
+                4: ['12:00', '5:55', '9:35']
+            };
+
+            const selectedTimes = times[option];
+            const clocks = document.querySelectorAll('.clock');
+
+            clocks.forEach((clock, index) => {
+                const time = selectedTimes[index].split(':');
+                const hours = parseInt(time[0]);
+                const minutes = parseInt(time[1]);
+
+                const hourHand = document.createElement('div');
+                hourHand.classList.add('hand');
+                hourHand.style.height = '4px';
+                hourHand.style.width = '40%';
+                hourHand.style.transform = `rotate(${(hours % 12) * 30 + minutes * 0.5}deg)`;
+
+                const minuteHand = document.createElement('div');
+                minuteHand.classList.add('hand');
+                minuteHand.style.transform = `rotate(${minutes * 6}deg)`;
+
+                clock.innerHTML = '';
+                clock.appendChild(hourHand);
+                clock.appendChild(minuteHand);
+            });
+        }
+    </script>
+</body>
+</html>
