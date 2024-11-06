@@ -3,107 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teaching Clocks</title>
+    <title>Clock for Kids</title>
     <style>
         body {
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
+            height: 100vh;
+            background-color: #f0f8ff;
             font-family: Arial, sans-serif;
         }
-
-        .container {
-            display: flex;
-            justify-content: space-around;
-            width: 100%;
-            margin: 20px 0;
-        }
-
         .clock {
-            width: 150px;
-            height: 150px;
-            border: 5px solid black;
+            background: #fff;
+            border: 5px solid #000;
             border-radius: 50%;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             position: relative;
+            margin-bottom: 20px;
         }
-
-        .clock::after {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: black;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-        }
-
         .hand {
-            width: 50%;
-            height: 2px;
-            background: black;
             position: absolute;
-            top: 50%;
-            transform-origin: 100%;
-            transform: rotate(90deg);
+            background: #000;
+            transform-origin: bottom;
         }
-
-        .options {
-            margin-top: 20px;
+        .hour {
+            width: 8px;
+            height: 80px;
+            bottom: 50%;
         }
-
-        button {
-            margin: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
+        .minute {
+            width: 4px;
+            height: 120px;
+            bottom: 50%;
+        }
+        .second {
+            width: 2px;
+            height: 140px;
+            bottom: 50%;
+            background: red;
+        }
+        .center {
+            width: 10px;
+            height: 10px;
+            background: #000;
+            border-radius: 50%;
+            position: absolute;
+        }
+        .digital-clock {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        .time-selector {
+            display: flex;
+            gap: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="clock" id="clock1"></div>
-        <div class="clock" id="clock2"></div>
-        <div class="clock" id="clock3"></div>
+    <div class="digital-clock" id="digital-clock"></div>
+    <div class="clock">
+        <div class="hand hour" id="hour"></div>
+        <div class="hand minute" id="minute"></div>
+        <div class="hand second" id="second"></div>
+        <div class="center"></div>
     </div>
-    <div class="options">
-        <button onclick="setTime(1)">Option 1</button>
-        <button onclick="setTime(2)">Option 2</button>
-        <button onclick="setTime(3)">Option 3</button>
-        <button onclick="setTime(4)">Option 4</button>
+    <div class="time-selector">
+        <label for="hours">Hours:</label>
+        <input type="number" id="hours" min="0" max="23">
+        <label for="minutes">Minutes:</label>
+        <input type="number" id="minutes" min="0" max="59">
+        <button onclick="setCustomTime()">Set Time</button>
     </div>
+
     <script>
-        function setTime(option) {
-            const times = {
-                1: ['10:10', '2:30', '6:45'],
-                2: ['3:15', '7:20', '11:50'],
-                3: ['1:05', '4:40', '8:25'],
-                4: ['12:00', '5:55', '9:35']
-            };
+        let customTime = null;
 
-            const selectedTimes = times[option];
-            const clocks = document.querySelectorAll('.clock');
+        function updateClock() {
+            const now = customTime ? new Date(customTime) : new Date();
+            const seconds = now.getSeconds();
+            const minutes = now.getMinutes();
+            const hours = now.getHours();
 
-            clocks.forEach((clock, index) => {
-                const time = selectedTimes[index].split(':');
-                const hours = parseInt(time[0]);
-                const minutes = parseInt(time[1]);
+            const secondDegrees = ((seconds / 60) * 360) + 90;
+            const minuteDegrees = ((minutes / 60) * 360) + ((seconds / 60) * 6) + 90;
+            const hourDegrees = ((hours / 12) * 360) + ((minutes / 60) * 30) + 90;
 
-                const hourHand = document.createElement('div');
-                hourHand.classList.add('hand');
-                hourHand.style.height = '4px';
-                hourHand.style.width = '40%';
-                hourHand.style.transform = `rotate(${(hours % 12) * 30 + minutes * 0.5}deg)`;
+            document.getElementById('second').style.transform = `rotate(${secondDegrees}deg)`;
+            document.getElementById('minute').style.transform = `rotate(${minuteDegrees}deg)`;
+            document.getElementById('hour').style.transform = `rotate(${hourDegrees}deg)`;
 
-                const minuteHand = document.createElement('div');
-                minuteHand.classList.add('hand');
-                minuteHand.style.transform = `rotate(${minutes * 6}deg)`;
+            document.getElementById('digital-clock').textContent = now.toLocaleTimeString();
 
-                clock.innerHTML = '';
-                clock.appendChild(hourHand);
-                clock.appendChild(minuteHand);
-            });
+            if (customTime) {
+                customTime += 1000;
+            }
         }
+
+        function setCustomTime() {
+            const hours = parseInt(document.getElementById('hours').value) || 0;
+            const minutes = parseInt(document.getElementById('minutes').value) || 0;
+
+            const now = new Date();
+            now.setHours(hours);
+            now.setMinutes(minutes);
+            now.setSeconds(0);
+
+            customTime = now.getTime();
+
+            updateClock();
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
     </script>
 </body>
 </html>
