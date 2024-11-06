@@ -127,6 +127,10 @@
                 border-bottom: 1px solid black;
                 width: 100px;
             }
+
+            #AnswersSection {
+                page-break-before: always;
+            }
         }
 
         /* New styles for labels and dropdowns */
@@ -143,6 +147,42 @@
         button.generate {
             font-size: 18px;
             padding: 5px 10px;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            #QuestionPaper {
+                width: 100%;
+                padding: 10px;
+            }
+
+            .question {
+                flex: 1 1 100%;
+            }
+
+            label, select, button.generate {
+                font-size: 16px;
+                margin-right: 5px;
+                padding: 5px;
+            }
+
+            #CheckAnswers {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+
+            #PrintButton {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+
+            .score {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
