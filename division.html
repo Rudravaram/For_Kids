@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,17 +12,21 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
+            position: relative;
         }
 
         h1 {
             color: #333;
             margin-top: 20px;
+            display: flex;
+            align-items: center;
         }
 
-        #resultDisplay {
-            font-size: 20px;
-            color: #4CAF50;
-            margin-left: 10px;
+        #results {
+            margin-left: 20px;
+            font-size: 18px;
+            color: #333;
         }
 
         #QuestionPaper {
@@ -32,19 +35,17 @@
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
-        }
-
-        .question-container {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .question {
-            margin: 10px;
+            margin: 10px 0;
             padding: 10px;
             border-bottom: 1px solid #ddd;
-            flex: 1;
+            flex: 1 1 calc(33.33% - 20px);
+            box-sizing: border-box;
         }
 
         .question span {
@@ -58,128 +59,390 @@
             width: 50px;
             border: none;
             border-bottom: 1px solid #000;
-            outline: none;
+            background: none;
         }
 
         .question input[type="text"].wrong {
             background-color: #ffcccc;
         }
 
-        .result {
-            font-size: 16px;
-            margin-top: 10px;
+        .button-container {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            background-color: #f4f4f4;
+            padding: 10px 0;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        #CheckAnswers {
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
             background-color: #4CAF50;
             color: white;
-            padding: 10px 20px;
             border: none;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 20px auto;
-            display: block;
         }
 
-        #CheckAnswers:disabled {
+        .button-container button:disabled {
             background-color: #ccc;
             cursor: not-allowed;
         }
 
-        #printButton {
+        .print-button {
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: #4CAF50;
-            color: white;
             padding: 10px 20px;
-            border: none;
-            cursor: pointer;
             font-size: 16px;
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+        }
+
+        @media print {
+            .print-button, .button-container {
+                display: none;
+            }
+            #QuestionPaper {
+                display: flex;
+                flex-wrap: wrap;
+                page-break-after: always;
+            }
+            .question {
+                display: flex;
+                align-items: center;
+                flex: 1 1 calc(50% - 20px);
+                box-sizing: border-box;
+            }
+            .question input[type="text"] {
+                border: none;
+                border-bottom: 1px solid #000;
+                width: 100px;
+                background: none;
+                padding: 0;
+                font-size: 16px;
+                margin-left: 10px;
+            }
+            #AnswerSheet {
+                display: block;
+                page-break-before: always;
+            }
+        }
+
+        #AnswerSheet {
+            display: block;
+        }
+
+        label, select, button {
+            font-size: 20px;
+        }
+
+        .responsive-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .responsive-container div {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .responsive-container select {
+            max-width: 100px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 24px;
+                margin-top: 10px;
+            }
+
+            #QuestionPaper {
+                width: 100%;
+                padding: 10px;
+                gap: 5px;
+            }
+
+            .question {
+                flex: 1 1 calc(100% - 10px);
+                margin: 5px 0;
+                padding: 5px;
+            }
+
+            .question span {
+                font-size: 16px;
+            }
+
+            .question input[type="text"] {
+                font-size: 14px;
+                width: 40px;
+            }
+
+            .button-container {
+                padding: 5px 0;
+            }
+
+            .button-container button, .print-button {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+
+            label, select, button {
+                font-size: 16px;
+            }
+
+            .responsive-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .responsive-container div {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            }
+
+            .responsive-container select {
+                max-width: 100px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            .question span {
+                font-size: 14px;
+            }
+
+            .question input[type="text"] {
+                font-size: 12px;
+                width: 30px;
+            }
+
+            .button-container button, .print-button {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+
+            label, select, button {
+                font-size: 14px;
+            }
+
+            .responsive-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .responsive-container div {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            }
+
+            .responsive-container select {
+                max-width: 80px;
+            }
+        }
+
+        .correct-answer {
+            margin-left: 10px;
+            font-weight: bold;
+        }
+        .correct-answer.correct {
+            color: green;
+        }
+        .correct-answer.wrong {
+            color: red;
         }
     </style>
 </head>
 <body>
+    <button class="print-button" onclick="window.print()">Print</button>
+    <h1>Math Quiz <span id="results"></span></h1>
+    
+    <div class="responsive-container">
+        <div>
+            <label for="num1Digits">Digits for first number:</label>
+            <select id="num1Digits">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+        
+        <div>
+            <label for="num2Digits">Digits for second number:</label>
+            <select id="num2Digits">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+        
+        <div>
+            <label for="questionCount">Number of questions:</label>
+            <select id="questionCount">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+            </select>
+        </div>
+        
+        <div>
+            <label for="operation">Operation:</label>
+            <select id="operation">
+                <option value="*">Multiplication</option>
+                <option value="/">Division</option>
+                <option value="+">Addition</option>
+                <option value="-">Subtraction</option>
+            </select>
+        </div>
+        
+        <button onclick="generateQuestions()">Generate Questions</button>
+    </div>
+    
+    <div id="QuestionPaper">
+        <!-- Questions will go here -->
+    </div>
+    
+    <div id="AnswerSheet">
+        <h2>Answer Sheet</h2>
+        <!-- Answers will go here -->
+    </div>
+    
+    <div class="button-container">
+        <button onclick="checkAnswers()" id="CheckAnswers">Check Answers</button>
+    </div>
 
-<button id="printButton" onclick="window.print()">Print</button>
-<h1>Division Exam<span id="resultDisplay"></span></h1>
+    <script>
+        var total_number_of_questions = 0;
 
-<div id="QuestionPaper"></div>
-<input type="button" onClick="CheckAnswers()" id="CheckAnswers" value="Check Answers">
+        function checkAnswers() {
+            var i = 1;
+            var marks = 0;
+            while (i <= total_number_of_questions) {
+                var id1 = "user_answer" + i;
+                var id2 = "correct_answer" + i;
+                var userAns = document.getElementById(id1).value;
+                var correctAns = Math.round(parseFloat(document.getElementById(id2).value));
 
-<script>
-    var total_number_of_questions = 0;
+                var resultSpan = document.createElement('span');
+                resultSpan.classList.add('correct-answer');
 
-    function CheckAnswers() {
-        var i = 1;
-        var marks = 0;
-        while (i <= total_number_of_questions) {
-            var id1 = "user_answer" + i;
-            var id2 = "correct_answer" + i;
-            var userAns = parseFloat(document.getElementById(id1).value);
-            var correctAns = parseFloat(document.getElementById(id2).value);
-            var resultId = "result" + i;
-            if (userAns === correctAns) {
-                marks = marks + 1;
-                document.getElementById(id1).classList.remove('wrong');
-                document.getElementById(resultId).innerText = "Correct!";
-            } else {
-                document.getElementById(id1).classList.add('wrong');
-                document.getElementById(resultId).innerText = "X! Correct answer: " + correctAns;
+                if (userAns === "") {
+                    document.getElementById(id1).classList.add('wrong');
+                    resultSpan.classList.add('wrong');
+                    resultSpan.innerText = "Correct: " + correctAns;
+                } else if (isNaN(userAns)) {
+                    document.getElementById(id1).classList.add('wrong');
+                    resultSpan.classList.add('wrong');
+                    resultSpan.innerText = "Correct: " + correctAns;
+                } else {
+                    userAns = Math.round(parseFloat(userAns));
+                    if (userAns === correctAns) {
+                        marks = marks + 1;
+                        document.getElementById(id1).classList.remove('wrong');
+                        resultSpan.classList.add('correct');
+                        resultSpan.innerText = "Correct!";
+                    } else {
+                        document.getElementById(id1).classList.add('wrong');
+                        resultSpan.classList.add('wrong');
+                        resultSpan.innerText = "Correct: " + correctAns;
+                    }
+                }
+                document.getElementById(id1).parentNode.appendChild(resultSpan);
+                i = i + 1;
             }
-            i = i + 1;
+            document.getElementById("CheckAnswers").disabled = true;
+            document.getElementById("results").innerText = "You scored " + marks + "/" + total_number_of_questions;
         }
-        document.getElementById("CheckAnswers").disabled = true;
-        document.getElementById("resultDisplay").innerText = " - Score: " + marks + "/" + total_number_of_questions;
-    }
 
-    function getRandomIntInclusive(min, max) {
-        const minCeiled = Math.ceil(min);
-        const maxFloored = Math.floor(max);
-        return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
-    }
-
-    function DesignQuestionPaper(questionCount, operation, minNum1, maxNum1, minNum2, maxNum2) {
-        var i = 1;
-        var questionContainer = document.createElement('div');
-        questionContainer.className = 'question-container';
-        while (i <= questionCount) {
-            total_number_of_questions = total_number_of_questions + 1;
-            var num1 = getRandomIntInclusive(minNum1, maxNum1);
-            var num2 = getRandomIntInclusive(minNum2, maxNum2);
-
-            if ((operation === '-' || operation === '/') && num2 > num1) {
-                var num = num1;
-                num1 = num2;
-                num2 = num;
-            }
-
-            var ans = 0;
-            if (operation === '*')
-                ans = num1 * num2;
-            if (operation === '+')
-                ans = num1 + num2;
-            if (operation === '-')
-                ans = num1 - num2;
-            if (operation === '/')
-                ans = num1 / num2;
-            var id1 = "user_answer" + total_number_of_questions;
-            var id2 = "correct_answer" + total_number_of_questions;
-            var resultId = "result" + total_number_of_questions;
-            var question = "<div class='question'><span>" + num1 + " " + operation + " " + num2 + " = </span> <input type='text' id='" + id1 + "' /> <input type='text' hidden value='" + ans + "' id='" + id2 + "' /> <span class='result' id='" + resultId + "'></span></div>";
-            questionContainer.innerHTML += question;
-
-            if (i % 3 === 0 || i === questionCount) {
-                document.getElementById("QuestionPaper").appendChild(questionContainer);
-                questionContainer = document.createElement('div');
-                questionContainer.className = 'question-container';
-            }
-            i = i + 1;
+        function getRandomIntInclusive(min, max) {
+            const minCeiled = Math.ceil(min);
+            const maxFloored = Math.floor(max);
+            return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
         }
-    }
 
-    DesignQuestionPaper(20, '/', 10, 90, 1, 10);
-</script>
+        function generateQuestions() {
+            var num1Digits = parseInt(document.getElementById("num1Digits").value);
+            var num2Digits = parseInt(document.getElementById("num2Digits").value);
+            var questionCount = parseInt(document.getElementById("questionCount").value);
+            var operation = document.getElementById("operation").value;
+            
+            var minNum1 = Math.pow(10, num1Digits - 1);
+            var maxNum1 = Math.pow(10, num1Digits) - 1;
+            var minNum2 = Math.pow(10, num2Digits - 1);
+            var maxNum2 = Math.pow(10, num2Digits) - 1;
+            
+            DesignQuestionPaper(questionCount, operation, minNum1, maxNum1, minNum2, maxNum2);
+        }
 
+        function DesignQuestionPaper(questionCount, operation, minNum1, maxNum1, minNum2, maxNum2) {
+            document.getElementById("QuestionPaper").innerHTML = ""; // Clear previous questions
+            document.getElementById("AnswerSheet").innerHTML = "<h2>Answer Sheet</h2>"; // Clear previous answers
+            total_number_of_questions = 0;
+            var i = 1;
+            while (i <= questionCount) {
+                total_number_of_questions = total_number_of_questions + 1;
+                var num1 = getRandomIntInclusive(minNum1, maxNum1);
+                var num2 = getRandomIntInclusive(minNum2, maxNum2);
+
+                var ans;
+                var displayOperation = operation;
+                if (operation === "*") {
+                    ans = num1 * num2;
+                    displayOperation = "X";
+                } else if (operation === "/") {
+                    ans = num1 / num2;
+                    ans = Math.round(ans * 100) / 100; // Round to 2 decimal places
+                    displayOperation = "÷";
+                } else if (operation === "+") {
+                    ans = num1 + num2;
+                } else if (operation === "-") {
+                    ans = num1 - num2;
+                }
+                
+                var id1 = "user_answer" + total_number_of_questions;
+                var id2 = "correct_answer" + total_number_of_questions;
+                var question = "<div class='question'><span>" + num1 + " " + displayOperation + " " + num2 + " = </span> <input type='text' id='" + id1 + "' /> <input type='text' hidden value='" + ans + "' id='" + id2 + "' /></div>";
+                var answer = "<div class='question'><span>" + num1 + " " + displayOperation + " " + num2 + " = " + ans + "</span></div>";
+                document.getElementById("QuestionPaper").innerHTML += question;
+                document.getElementById("AnswerSheet").innerHTML += answer;
+                i = i + 1;
+            }
+        }
+    </script>
 </body>
 </html>
